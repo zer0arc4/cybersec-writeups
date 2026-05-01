@@ -1,4 +1,4 @@
-# 🧪 VulNyx Writeups
+# 🎲 VulNyx Writeups
 
 This directory contains my walkthroughs and writeups for labs and machines from VulNyx.
 
