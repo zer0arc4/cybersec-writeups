@@ -25,7 +25,8 @@ Writeups and walkthroughs from:
 - TryHackMe  
 - HackTheBox
 - VulNyx 
-- OverTheWire  
+- OverTheWire
+- OWASP Juice Shop
   
 
 ---
