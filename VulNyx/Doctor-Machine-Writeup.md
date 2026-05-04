@@ -42,7 +42,9 @@ Nmap done: 1 IP address (1 host up) scanned in 7.57 seconds
 ## 🌐 Web Enumeration
 
 - Opened port 80 in browser → Found **Docmed** website
-img 
+  
+<img width="1254" height="524" alt="Screenshot 2026-05-04 120535" src="https://github.com/user-attachments/assets/6c06351b-8ccc-40ac-97df-755a70db51d1" />
+
 - Navigated to "Doctors" section → identified possible parameter-based inclusion  
 
 ---
