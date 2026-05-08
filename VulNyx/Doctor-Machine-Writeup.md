@@ -6,7 +6,7 @@
 
 ## 🎯 Target Overview
 - Machine Name: Doctor  
-- Platform: VulnX  
+- Platform: VulNyx  
 - Vulnerabilities:
   - Local File Inclusion (LFI)
   - Misconfigured File Permissions
