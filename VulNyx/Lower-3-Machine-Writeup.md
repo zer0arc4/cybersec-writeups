@@ -1,5 +1,6 @@
 # [VulNyx](https://vulnyx.com/) – Lower-3 Machine  Writeup  
 
+<img width="668" height="418" alt="image" src="https://github.com/user-attachments/assets/a91b62d1-b10d-4dbd-9bc0-496d9d4b6257" />
 
 ---
 
