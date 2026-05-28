@@ -459,4 +459,4 @@ This misconfiguration allowed direct privilege escalation to the root user.
 
 ---
 
-**Author:** zer0arc4
+## **Author:** [zer0arc4](https://github.com/zer0arc4)
