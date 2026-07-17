@@ -94,7 +94,8 @@ Nmap done: 1 IP address (1 host up) scanned in 9.60 seconds
 
 Browse to port **80**.
 
-<img >
+<img width="1918" height="938" alt="image" src="https://github.com/user-attachments/assets/266e84a6-311f-41c4-a1b0-a469d084e85e" />
+
 
 The web server displays the default **Lighttpd** welcome page.
 
