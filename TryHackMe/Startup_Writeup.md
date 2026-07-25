@@ -112,8 +112,9 @@ get notice.txt
 The image contains an **Among Us meme**, while `notice.txt` contains the following message.
 
 ```text
-Whoever is leaving these damn Among Us memes in this share...
-Maya is looking pretty sus.
+Whoever is leaving these damn Among Us memes in this share, it IS NOT FUNNY.
+People downloading documents from our website will think we are a joke! Now I dont know who it is,
+but Maya is looking pretty sus.
 ```
 
 Although this appears to be a hint, it is not directly useful during exploitation.
@@ -349,7 +350,8 @@ cat recipe.txt
 ## Result
 
 ```text
-Someone asked what our main ingredient to our spice soup is today. I figured I can't keep it a secret forever and told him it was **FLAG**.
+Someone asked what our main ingredient to our spice soup is today.
+I figured I can't keep it a secret forever and told him it was **FLAG**.
 ```
 
 This reveals the first flag.
