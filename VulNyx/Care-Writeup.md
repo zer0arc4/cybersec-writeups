@@ -1,5 +1,7 @@
 # [VulNyx](https://vulnyx.com/) – Care Writeup  
 
+<img width="848" height="435" alt="Screenshot 2026-07-30 213854" src="https://github.com/user-attachments/assets/326be58a-c134-4f01-a4db-6643717de356" />
+
 ---
 
 # 🎯 Target Information
