@@ -302,7 +302,8 @@ cat /root/root.txt
 ```text
 root@explorer:~# cat /root/root.txt 
 9a045d36c5a28f01784bdcfb326accfe
-root@explorer:~# ```
+root@explorer:~#
+```
 
 ---
 
