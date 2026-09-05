@@ -394,7 +394,11 @@ if (file_exists($file) && is_readable($file)) {
 <img width="1722" height="732" alt="Screenshot_2026-09-05_09_43_37" src="https://github.com/user-attachments/assets/0d879d78-bb67-40f0-af5e-93a8089d4cb7" />
 
 
-After saving the modification, Now let's click the `Edit Website` option from the right-side menu and open the `source page` of the site.
+After saving the modification, 
+
+<img width="1918" height="893" alt="Screenshot_2026-09-05_09_43_46" src="https://github.com/user-attachments/assets/b9b5fd38-8dd9-46dd-a7e8-bc10d86725d0" />
+
+Now let's click the `Edit Website` option from the right-side menu and open the `source page` of the site.
 
 <img width="1918" height="811" alt="Screenshot_2026-09-05_09_43_57" src="https://github.com/user-attachments/assets/1726aef8-fe14-473f-9765-a460be88a237" />
 
