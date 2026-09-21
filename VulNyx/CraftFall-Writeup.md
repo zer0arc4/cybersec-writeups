@@ -1,5 +1,7 @@
 # [VulNyx](https://vulnyx.com/) – CraftFall Writeup
 
+<img width="671" height="426" alt="CraftFall" src="https://github.com/user-attachments/assets/f40688bc-b48a-4471-9b41-7e554bb2ba27" />
+
 
 ---
 
@@ -159,15 +161,11 @@ CVE-2025-32432
 ```
 > This vulnerability affects Craft CMS versions before the fixed release and can lead to remote code execution through the vulnerable asset-transform functionality.
 
-The notes indicate that the machine is running:
-```
-Craft CMS 5.6.16
-```
 The vulnerability was fixed in:
 ```
 Craft CMS 5.6.17
 ```
-Therefore, the target is vulnerable to CVE-2025-32432.
+Therefore, the target is maybe vulnerable to CVE-2025-32432.
 
 # 🧪 Obtain the Exploit
 
