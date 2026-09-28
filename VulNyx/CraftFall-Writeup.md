@@ -153,18 +153,15 @@ This indicates that the application is using Craft `CMS 5.x`.
 
 The exact version is not immediately disclosed, so the next step is to investigate known vulnerabilities affecting Craft CMS 5.x.
 
- ## ⚠️ CVE-2025-32432**
+ ## ⚠️ CVE-2025-32432
 
 Research identified:
 ```
 CVE-2025-32432
 ```
-> This vulnerability affects Craft CMS versions before the fixed release and can lead to remote code execution through the vulnerable asset-transform functionality.
+CVE-2025-32432 is a critical `remote code execution` (RCE) vulnerability in Craft CMS that affects versions `3.0.0-RC1–3.9.14`, `4.0.0-RC1–4.14.14`, and `5.0.0-RC1–5.6.16`. The flaw allows an `unauthenticated` remote attacker to execute arbitrary code on the server.
 
-The vulnerability was fixed in:
-```
-Craft CMS 5.6.17
-```
+> This vulnerability affects Craft CMS versions before the fixed release `Craft CMS 5.6.17`
 Therefore, the target is maybe vulnerable to CVE-2025-32432.
 
 # 🧪 Obtain the Exploit
