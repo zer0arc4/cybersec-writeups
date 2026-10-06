@@ -1,4 +1,4 @@
-# TryHackMe – LooseEnds Writeup
+# [TryHackMe](https://tryhackme.com/room/looseendsEZ) – LooseEnds Writeup
 
 <img width="1170" height="658" alt="LooseEnds" src="https://github.com/user-attachments/assets/cdce8ea6-0f4b-4a50-8e37-c02133f7d60b" />
 
