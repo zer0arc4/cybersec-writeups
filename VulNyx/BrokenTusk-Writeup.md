@@ -1299,7 +1299,7 @@ cat /home/zer0arc4/user.txt
 **User flag:**
 
 ```text
-12a15080430bc7d26dd392e2e6c7759aeb8f0d67e88867bc2f5d45bbf7a40cae
+9346e4474996a9ba8cc5248f4e5051c5
 ```
 
 ## Root Flag
@@ -1311,7 +1311,7 @@ cat /root/root.txt
 **Root flag:**
 
 ```text
-ba58f8149ec6807f5363f4fd930bae7b276aff49cce8f48716b782b4362a4438
+65742587f1d6944b0ed55f6c1d311e21
 ```
 
 
